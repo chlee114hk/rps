@@ -1,0 +1,124 @@
+const r = await rps.requestRandomWords()
+await rps.requestRandomWords()
+deployer.sendTransaction({to: "0x8f090ca90B7eDAe31815b74122cE0Cd5b23dB6d1", value: ethers.utils.parseEther("0.1")});
+const rps = await rps1.attach('0x8f090ca90B7eDAe31815b74122cE0Cd5b23dB6d1')
+rps.withdraw(ethers.utils.parseEther('0.08'))
+rps.withdraw(ethers.utils.parseEther(‘0.08'))
+rps.withdraw(0.08)
+const rps = await rps1.attach('0xF2aAD54Faad2Eee83fB882C4A220AeAcA14899bC')
+const rps1 = await ethers.getContractFactory("Rps1");
+const [deployer] = await ethers.getSigners();
+const { hre, ethers } = require("hardhat");
+const utils  = require("ethers/lib/utils");
+await rps.reveal('1-pass')
+await rps.moveHost()
+await rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther('0.01') });
+await rps.reveal('1-pass')
+await rps.moveHost()
+await rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther('0.01') });
+await rps.reveal('1-pass')
+await rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther('0.01') });
+await rps.bet()
+await rps.reveal('1-pass')
+await rps.moveHost()
+await rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther('0.01') });
+await nrps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther('0.01') });
+rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther(‘0.01') });
+await rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther(‘0.01') });
+utils.soliditySha256(['string'], ["1-pass"])
+const rps = await rps1.attach('0xF2aAD54Faad2Eee83fB882C4A220AeAcA14899bC')
+const rps1 = await ethers.getContractFactory("Rps1");
+const t1 = deployer.sendTransaction({to: "0xF2aAD54Faad2Eee83fB882C4A220AeAcA14899bC", value: ethers.utils.parseEther('0.1')});
+const t1 = deployer.sendTransaction({to: "0xF2aAD54Faad2Eee83fB882C4A220AeAcA14899bC", value: ethers.utils.parseEther(“0.1”)});
+const [deployer] = await ethers.getSigners();
+const { hre, ethers } = require("hardhat");
+const utils  = require("ethers/lib/utils");
+await rps.withdraw(ethers.utils.parseEther("0.13"))
+await rps.withdraw(ethers.utils.parseEther("1.29"))
+await rps.withdraw(ethers.utils.parseEther("1.2999"))
+rps.withdraw(ethers.utils.parseEther("1.3"))
+ethers.utils.parseEther("1.3")
+ethers.utils.parseEther(‘1.3')
+await rps.moveHost()
+ethers.utils.parseEther(‘1.3')
+rps.withdraw(ethers.utils.parseEther(‘1.3'))
+await rps.withdraw(ethers.utils.parseEther(‘1.3'))
+await rps.moveHost()
+await rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther('0.01') });
+await rps.moveHost()
+rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther('0.01') });
+await rps.randomWordsNum()
+await rps.requestRandomWords()
+await rps.bet()
+await rps.moveHost()
+rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther('0.01') });
+const t1 = deployer.sendTransaction({to: "0x25c3Fc83F3195d69EC31c1298cD8D27AeA7f3C52", value: ethers.utils.parseEther("0.1")});
+const tx = deployer.sendTransaction({to: "0x25c3Fc83F3195d69EC31c1298cD8D27AeA7f3C52", value: ethers.utils.parseEther("0.1")});
+rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther('0.01') });
+rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther('0.001') });
+const tx = deployer.sendTransaction({to: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512", value: ethers.utils.parseEther("0.1")});
+const rps = await rps1.attach('0x25c3Fc83F3195d69EC31c1298cD8D27AeA7f3C52')
+const rps1 = await ethers.getContractFactory("Rps1");
+const [deployer] = await ethers.getSigners();
+const { hre, ethers } = require("hardhat");
+const utils  = require("ethers/lib/utils");
+await rps.requestRandomWords()
+await rps.requestIds[1]
+await rps.requestIds[0]
+await rps.requestIds(0)
+await rps.requestIds(1)
+await rps.requestIds()
+await rps.requestIds
+await rps.s_requests(0)
+await rps.s_requests(1)
+await rps.s_requests()
+await rps.COORDINATOR()
+await rps.randomWordsNum()
+rps.randomWordsNum()
+rps.randomWordsNum
+rps.callbackGasLimit
+await rps.callbackGasLimit
+await rps.callbackGasLimit()
+await rps.keyHash
+await rps.keyHash()
+await rps.s_subscriptionId
+await rps.s_subscriptionId()
+await rps.requestRandomWords()
+await rps.lastRequestId()
+await rps.requestRandomWords()
+await rps.moveHost()
+await rps.bet()
+rps.bet()
+rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther('0.1') });
+t10
+const t10 = deployer.sendTransaction({to: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512", value: ethers.utils.parseEther("1.0")});
+const t1 = deployer.sendTransaction({to: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512", value: ethers.utils.parseEther("1.0")});
+ const [deployer] = await ethers.getSigners();
+const { hre, ethers } = require("hardhat");
+const t1 = Signer.sendTransaction({to: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512", value: ethers.utils.parseEther("1.0")});
+const tx = Signer.sendTransaction({to: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512", value: ethers.utils.parseEther("1.0")});
+const tx = signer.sendTransaction({to: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512", value: ethers.utils.parseEther("1.0")});
+const { Signer } = require("ethers");
+rps.fund( { value: ethers.utils.parseEther('1') });
+rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther('0.1') });
+rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: ethers.utils.parseEther('0.001') });
+rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: 1e16 });
+rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: 1000 });
+rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: 100 });
+rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: 10 });
+rps.playBet('0x8e560ef882f3e9f3853d501b9ca57100fd123ba738d3bc50bbf80dbec5657c0b', { value: 1e16 });
+accounts[1]
+account[1]
+utils.soliditySha256(['string'], ["1-pass"])
+utils.soliditySha256(['string'], ["1-12121"])
+utils.soliditySha256(['bytes32'], ["1-12121"])
+utils.soliditySha256(['bytes32'], "1-12121")
+utils.sha256("0x42")
+utils.sha256(["0x1"])
+utils.sha256("0x1")
+utils.sha256("1")
+const utils  = require("ethers/lib/utils");
+utils.sha256("1")
+const rps = await rps1.attach('0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512')
+const rps = await Box.attach('0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512')
+const rps1 = await ethers.getContractFactory("Rps1");
