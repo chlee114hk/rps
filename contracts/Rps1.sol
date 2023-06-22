@@ -5,10 +5,11 @@ import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 /// @author Vincent Lee
 /// @title Rock Paper Scissors Game
-contract Rps1 is VRFConsumerBaseV2, ConfirmedOwner {
+contract Rps1 is VRFConsumerBaseV2, ConfirmedOwner, ReentrancyGuard {
 
     /// Valid moves the player can play
     enum Moves {None, Rock, Paper, Scissors}
@@ -145,7 +146,7 @@ contract Rps1 is VRFConsumerBaseV2, ConfirmedOwner {
         _hostCommitMove();
     }
 
-    function reveal(string memory clearMove) public isPlayer commitPhaseEnded returns (bool) {
+    function reveal(string memory clearMove) public isPlayer commitPhaseEnded nonReentrant returns (bool) {
         bytes32 encryptedMove = sha256(abi.encodePacked(clearMove));  // Hash of clear input (= "move-password")
         Moves move = Moves(getFirstChar(clearMove));                  // Actual move (Rock / Paper / Scissors)
 
