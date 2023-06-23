@@ -3,8 +3,8 @@
 ## Contents
 
 * [Description](#description)
-    * [Rps1.sol](*Rps1.sol)
-    * [Rps2.sol](*Rps2.sol)
+    * [Rps1.sol](*Rps1sol)
+    * [Rps2.sol](*Rps2sol)
 * [Provable fairness](#Provable-fairness)
 * [Security](#Security)
     * [Random number genaration](#Random-number-genaration)
@@ -42,13 +42,13 @@ At the same time, player is not able to cheat. As host's move only known to play
 
 ## Security
 
-# Random number genaration
+### Random number genaration
 
 Host's move in this project is generated using [Chainlink VRF (Verifiable Random Function)](https://docs.chain.link/vrf/v2/introduction) which is a provably fair and verifiable random number generator (RNG) that enables smart contracts to access random values without compromising security or usability. For each request, Chainlink VRF generates one or more random values and cryptographic proof of how those values were determined. The proof is published and verified on-chain before any consuming applications can use it. This process ensures that results cannot be tampered with or manipulated by any single entity including oracle operators, miners, users, or smart contract developers.
 
 **Important Notice**: [Subscription](https://docs.chain.link/vrf/v2/subscription) method is used in this proeject for requesting randomness. Enough balance of LINK tokens funded to the subscription and adding of consumer with deployed smart contract address is required for randomness in this project to generate properly.
 
-# ReentrancyGuard
+### ReentrancyGuard
 
 [ReentrancyGuard](https://docs.openzeppelin.com/contracts/4.x/api/security#ReentrancyGuard) from openzeppelin is used in this project
 `import "@openzeppelin/contracts/security/ReentrancyGuard.sol";`
