@@ -3,8 +3,8 @@
 ## Contents
 
 * [Description](#description)
-    * [Rps1.sol](*Rps1sol)
-    * [Rps2.sol](*Rps2sol)
+    * [Rps1.sol](#Rps1sol)
+    * [Rps2.sol](#Rps2sol)
 * [Provable fairness](#Provable-fairness)
 * [Security](#Security)
     * [Random number genaration](#Random-number-genaration)
