@@ -57,15 +57,12 @@ that helps prevent reentrant calls to certain function.
 The reveal function which included internal helper function `pay` which handle payment to player is protected by `nonReentrant` modifier that make sure there are no nested (reentrant) calls to it.
 
 ```solidity
-/**
-
-    function reveal(string memory clearMove) public isPlayer commitPhaseEnded nonReentrant returns (bool) {
-        // reveal logic
-        
-        pay(player, outcome, bet);
-        _reset();
-
-    }
+function reveal(string memory clearMove) public isPlayer commitPhaseEnded nonReentrant returns (bool) {
+    // reveal logic
+    
+    pay(player, outcome, bet);
+    _reset();
+}
 ```
 
 All game status is reset by `_reset()` after the player reveal his move and get the payment.
