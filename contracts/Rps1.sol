@@ -25,7 +25,7 @@ contract Rps1 is VRFConsumerBaseV2, ConfirmedOwner, ReentrancyGuard {
 
     bytes32 private encryptedMovePlayer;               /// Encrypted move of player - Hash of plain input (= "move-password")
     
-    Moves private movePlayer;                          /// Clear move set only after host have committed his move
+    Moves public movePlayer;                          /// Clear move set only after host have committed his move
     Moves public moveHost;                             /// Host always commits move after player committed his move, but host can not know player's move before he committed his move because it is encrypted
 
 
@@ -38,7 +38,7 @@ contract Rps1 is VRFConsumerBaseV2, ConfirmedOwner, ReentrancyGuard {
     mapping(uint256 => RequestStatus) public s_requests; /* requestId --> requestStatus */
     VRFCoordinatorV2Interface COORDINATOR;
 
-    // ubscription ID.
+    // subscription ID.
     uint64 s_subscriptionId;
 
     // past requests Id.

@@ -1,6 +1,6 @@
-const Rps1 = artifacts.require("Rps1");
-const Rps1Abi = require('../artifacts/contracts/Rps1.sol/Rps1.json');
-const Rps1MockAbi = require('../artifacts/contracts/Mock/Rps1Mock.sol/Rps1Mock.json');
+const Rps2 = artifacts.require("Rps2");
+const Rps2Abi = require('../artifacts/contracts/Rps2.sol/Rps2.json');
+const Rps2MockAbi = require('../artifacts/contracts/Mock/Rps2Mock.sol/Rps2Mock.json');
 const VRFCoordinatorV2Mock = require('../artifacts/@chainlink/contracts/src/v0.8/mocks/VRFCoordinatorV2Mock.sol/VRFCoordinatorV2Mock.json');
 const { use, expect } = require("chai");
 const { waffle, ethers } = require('hardhat');
@@ -18,13 +18,13 @@ function getEventArgs(transaction, evt) {
     return event.args;
 }
 
-contract('Rps1', function(accounts) {
+contract('Rps2', function(accounts) {
     async function setup() {
         const [sender, receiver] = new MockProvider().getWallets();
-        const mockRps1 = await deployMockContract(sender, Rps1Abi.abi);
+        const mockRps2 = await deployMockContract(sender, Rps2Abi.abi);
         const mockVRFCoordinatorV2Mock = await deployMockContract(sender, VRFCoordinatorV2Mock.abi, 0, 0, {from: sender});
-        const contractFactory = new ContractFactory(Rps1Abi.abi, Rps1Abi.bytecode, sender);
-        const rps1MockFactory = new ContractFactory(Rps1MockAbi.abi, Rps1MockAbi.bytecode, sender);
+        const contractFactory = new ContractFactory(Rps2Abi.abi, Rps2Abi.bytecode, sender);
+        const rps2MockFactory = new ContractFactory(Rps2MockAbi.abi, Rps2MockAbi.bytecode, sender);
         const subscriptionId = 1;
         const vrfCoordinatorV2Mock = await ethers.getContractFactory("VRFCoordinatorV2Mock");
         const hardhatVRFCoordinatorV2Mock = await vrfCoordinatorV2Mock.deploy(0, 0);
@@ -57,22 +57,22 @@ contract('Rps1', function(accounts) {
             "0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c",
             { value: ethers.utils.parseEther("0.1") }
         );
-        // const rps1Mock = await ethers.getContractFactory("Rps1Mock");
-        // const rps1MockContract = await ethers.deployContract(
-        //     "Rps1Mock",
+        // const rps2Mock = await ethers.getContractFactory("Rps2Mock");
+        // const rps2MockContract = await ethers.deployContract(
+        //     "Rps2Mock",
         //     [subscriptionId,
         //     mockVRFCoordinatorV2Mock.address,
         //     "0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c"],
         //     { value: ethers.utils.parseEther("0.1") }
         // )
-        const rps1MockContract = await rps1MockFactory.deploy(
+        const rps2MockContract = await rps2MockFactory.deploy(
             subscriptionId,
             mockVRFCoordinatorV2Mock.address,
             "0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c",
             { value: ethers.utils.parseEther("0.1") }
         )
 
-        return {sender, receiver, hardhatVRFCoordinatorV2Mock, contract, mockVRFCoordinatorV2Mock, mockRps1, rps1MockContract};
+        return {sender, receiver, hardhatVRFCoordinatorV2Mock, contract, mockVRFCoordinatorV2Mock, mockRps2, rps2MockContract};
     }
 
     describe("playBet", function() {
@@ -87,14 +87,14 @@ contract('Rps1', function(accounts) {
         });
 
         // it("should let bet a move", async function() {  
-        //     // const contract = await Rps1.new(
+        //     // const contract = await Rps2.new(
         //     //     2963,
         //     //     "0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625",
         //     //     "0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c",
         //     //     { value: ethers.utils.parseEther("0.1") }
         //     // );
-        //     const rps1 = await ethers.getContractFactory("Rps1");
-        //     const rps = await rps1.attach('0x2dEA0668C4159ad35c050AD55803d2fc12069322');
+        //     const rps2 = await ethers.getContractFactory("Rps2");
+        //     const rps = await rps2.attach('0x2dEA0668C4159ad35c050AD55803d2fc12069322');
         //     const bet = ethers.utils.parseEther("0.01");
         //     const encryptedMove = utils.soliditySha256(['string'], ["1-pass"]);
         //     let transaction = await rps.playBet(encryptedMove, { value: bet });
@@ -105,7 +105,7 @@ contract('Rps1', function(accounts) {
         // });
         
         it("should fail to create a game when no bet is placed", async function() {
-            const contract = await Rps1.new(
+            const contract = await Rps2.new(
                 2963,
                 "0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625",
                 "0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c"
@@ -123,7 +123,7 @@ contract('Rps1', function(accounts) {
 
     describe("reveal", function() {
         it("should not be able reveal a move when host not yet committed move", async function() {  
-            const {contract, mockRps1, mockVRFCoordinatorV2Mock}  = await setup();
+            const {contract, mockRps2, mockVRFCoordinatorV2Mock}  = await setup();
             const bet = ethers.utils.parseEther("0.01");
             const encryptedMove = utils.soliditySha256(['string'], ["1-pass"]);
             await mockVRFCoordinatorV2Mock.mock.requestRandomWords.returns(1);
@@ -137,102 +137,102 @@ contract('Rps1', function(accounts) {
         });
 
         it("should be able reveal a move with correct move and password (Draw Case)", async function() {  
-            const {sender, rps1MockContract, mockVRFCoordinatorV2Mock}  = await setup();
+            const {sender, rps2MockContract, mockVRFCoordinatorV2Mock}  = await setup();
             const bet = ethers.utils.parseEther("0.01");
             const encryptedMove = utils.soliditySha256(['string'], ["1-pass"]);
             await mockVRFCoordinatorV2Mock.mock.requestRandomWords.returns(1);
-            await rps1MockContract.setRandomWordsNum(3);
-            const num = await rps1MockContract.randomWordsNum()
-            await rps1MockContract.playBet(encryptedMove, { value: bet });
+            await rps2MockContract.setRandomWordsNum(3);
+            const num = await rps2MockContract.randomWordsNum()
+            await rps2MockContract.playBet(encryptedMove, { value: bet });
             const clearMove = "1-pass";
-            moveHost = await rps1MockContract.moveHost();
+            moveHost = await rps2MockContract.moveHost();
             expect(moveHost).to.be.equal(num % 3 + 1, `Host should committed move`);
-            await expect(await rps1MockContract.reveal(clearMove)).to.emit(
-                rps1MockContract,
+            await expect(await rps2MockContract.reveal(clearMove)).to.emit(
+                rps2MockContract,
                 "Draw"
             ).withArgs(sender.address, 1, moveHost, bet);
         });
 
         it("should be able reveal a move with correct move and password (Lost Case)", async function() {  
-            const {sender, rps1MockContract, mockVRFCoordinatorV2Mock}  = await setup();
+            const {sender, rps2MockContract, mockVRFCoordinatorV2Mock}  = await setup();
             const bet = ethers.utils.parseEther("0.01");
             const encryptedMove = utils.soliditySha256(['string'], ["1-pass"]);
             await mockVRFCoordinatorV2Mock.mock.requestRandomWords.returns(1);
-            await rps1MockContract.setRandomWordsNum(4);
-            const num = await rps1MockContract.randomWordsNum()
-            await rps1MockContract.playBet(encryptedMove, { value: bet });
+            await rps2MockContract.setRandomWordsNum(4);
+            const num = await rps2MockContract.randomWordsNum()
+            await rps2MockContract.playBet(encryptedMove, { value: bet });
             const clearMove = "1-pass";
-            moveHost = await rps1MockContract.moveHost();
+            moveHost = await rps2MockContract.moveHost();
             expect(moveHost).to.be.equal(num % 3 + 1, `Host should committed move`);
-            await expect(await rps1MockContract.reveal(clearMove)).to.emit(
-                rps1MockContract,
+            await expect(await rps2MockContract.reveal(clearMove)).to.emit(
+                rps2MockContract,
                 "Lost"
             ).withArgs(sender.address, 1, moveHost, bet);
         });
 
         it("should be able reveal a move with correct move and password (Won Case)", async function() {  
-            const {sender, rps1MockContract, mockVRFCoordinatorV2Mock}  = await setup();
+            const {sender, rps2MockContract, mockVRFCoordinatorV2Mock}  = await setup();
             const bet = ethers.utils.parseEther("0.01");
             const encryptedMove = utils.soliditySha256(['string'], ["1-pass"]);
             await mockVRFCoordinatorV2Mock.mock.requestRandomWords.returns(1);
-            await rps1MockContract.setRandomWordsNum(5);
-            const num = await rps1MockContract.randomWordsNum()
-            await rps1MockContract.playBet(encryptedMove, { value: bet });
+            await rps2MockContract.setRandomWordsNum(5);
+            const num = await rps2MockContract.randomWordsNum()
+            await rps2MockContract.playBet(encryptedMove, { value: bet });
             const clearMove = "1-pass";
-            moveHost = await rps1MockContract.moveHost();
+            moveHost = await rps2MockContract.moveHost();
             expect(moveHost).to.be.equal(num % 3 + 1, `Host should committed move`);
-            await expect(await rps1MockContract.reveal(clearMove)).to.emit(
-                rps1MockContract,
+            await expect(await rps2MockContract.reveal(clearMove)).to.emit(
+                rps2MockContract,
                 "Won"
             ).withArgs(sender.address, 1, moveHost, bet);
         });
 
         it("should not be able reveal a move with wrong move", async function() {  
-            const {sender, rps1MockContract, mockVRFCoordinatorV2Mock}  = await setup();
+            const {sender, rps2MockContract, mockVRFCoordinatorV2Mock}  = await setup();
             const bet = ethers.utils.parseEther("0.01");
             const encryptedMove = utils.soliditySha256(['string'], ["1-pass"]);
             await mockVRFCoordinatorV2Mock.mock.requestRandomWords.returns(1);
-            await rps1MockContract.setRandomWordsNum(5);
-            const num = await rps1MockContract.randomWordsNum()
-            await rps1MockContract.playBet(encryptedMove, { value: bet });
+            await rps2MockContract.setRandomWordsNum(5);
+            const num = await rps2MockContract.randomWordsNum()
+            await rps2MockContract.playBet(encryptedMove, { value: bet });
             const clearMove = "2-pass";
-            moveHost = await rps1MockContract.moveHost();
+            moveHost = await rps2MockContract.moveHost();
             expect(moveHost).to.be.equal(num % 3 + 1, `Host should committed move`);
-            await expect(await rps1MockContract.reveal(clearMove)).not.to.emit(
-                rps1MockContract,
+            await expect(await rps2MockContract.reveal(clearMove)).not.to.emit(
+                rps2MockContract,
                 "Won"
             )
-            await expect(await rps1MockContract.reveal(clearMove)).not.to.emit(
-                rps1MockContract,
+            await expect(await rps2MockContract.reveal(clearMove)).not.to.emit(
+                rps2MockContract,
                 "Lost"
             )
-            await expect(await rps1MockContract.reveal(clearMove)).not.to.emit(
-                rps1MockContract,
+            await expect(await rps2MockContract.reveal(clearMove)).not.to.emit(
+                rps2MockContract,
                 "Draw"
             )
         });
 
         it("should not be able reveal a move with wrong password", async function() {  
-            const {sender, rps1MockContract, mockVRFCoordinatorV2Mock}  = await setup();
+            const {sender, rps2MockContract, mockVRFCoordinatorV2Mock}  = await setup();
             const bet = ethers.utils.parseEther("0.01");
             const encryptedMove = utils.soliditySha256(['string'], ["1-pass"]);
             await mockVRFCoordinatorV2Mock.mock.requestRandomWords.returns(1);
-            await rps1MockContract.setRandomWordsNum(5);
-            const num = await rps1MockContract.randomWordsNum()
-            await rps1MockContract.playBet(encryptedMove, { value: bet });
+            await rps2MockContract.setRandomWordsNum(5);
+            const num = await rps2MockContract.randomWordsNum()
+            await rps2MockContract.playBet(encryptedMove, { value: bet });
             const clearMove = "1-wrongpass";
-            moveHost = await rps1MockContract.moveHost();
+            moveHost = await rps2MockContract.moveHost();
             expect(moveHost).to.be.equal(num % 3 + 1, `Host should committed move`);
-            await expect(await rps1MockContract.reveal(clearMove)).not.to.emit(
-                rps1MockContract,
+            await expect(await rps2MockContract.reveal(clearMove)).not.to.emit(
+                rps2MockContract,
                 "Won"
             )
-            await expect(await rps1MockContract.reveal(clearMove)).not.to.emit(
-                rps1MockContract,
+            await expect(await rps2MockContract.reveal(clearMove)).not.to.emit(
+                rps2MockContract,
                 "Lost"
             )
-            await expect(await rps1MockContract.reveal(clearMove)).not.to.emit(
-                rps1MockContract,
+            await expect(await rps2MockContract.reveal(clearMove)).not.to.emit(
+                rps2MockContract,
                 "Draw"
             )
         });

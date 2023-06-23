@@ -4,6 +4,7 @@ require("@nomiclabs/hardhat-etherscan");
 require("hardhat-gas-reporter");
 require('hardhat-abi-exporter');
 require('hardhat-contract-sizer');
+require('solidity-coverage')
 require("@nomiclabs/hardhat-truffle5");
 
 const dotenv = require("dotenv");
@@ -33,7 +34,16 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
  module.exports = {
-    networks: {      
+    networks: {  
+      hardhat: {
+        initialBaseFeePerGas: 0
+      },  
+      localhost: {
+        chainlink: {
+          keyHash: '0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc',
+          minimumRequestConfirmations: 3,
+        },
+      },
       rinkeby: {
         url: `https://rinkeby.infura.io/v3/${infura_id}`,
         accounts:
