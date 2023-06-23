@@ -278,24 +278,19 @@ contract Rps2 is VRFConsumerBaseV2, ConfirmedOwner, ReentrancyGuard {
         }
     }
 
+    /**
+     * Helper function for comparing hands and return outcome
+     * @param plr0 - Player 1 's move (Rock = 1, Paper = 2, Scissors = 3)
+     * @param plr1 - Player 2 's move (Rock = 1, Paper = 2, Scissors = 3)
+     * @return  The outcome for Player 1 (Win = 1, Lost = 2, Draw = 3) 
+     */
     function _decideOutcome(uint plr0, uint plr1) private pure returns(uint) {
         // win = 1, lost = 2, draw = 3
-        if (plr0 == plr1) {
+        if (plr0 == plr1) 
             return 3;
-        }
-        if (plr0 > plr1) {
-            if (plr1 == 1 && plr0 == 3) {
-                return 2;
-            }
-            return 1;
-        }
-        if (plr1 > plr0) {
-            if (plr0 == 1 && plr1 == 3) {
-                return 1;
-            }
+        if ((plr0 + 1) % 3 == plr1) 
             return 2;
-        }
-        return 0;
+        return 1;
     }
 
     // Host commit his move. 
