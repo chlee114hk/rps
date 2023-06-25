@@ -33,6 +33,7 @@
         "web3modal": "^1.9.4"
     },
     "devDependencies": {
+        "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
         "@nomiclabs/hardhat-ethers": "^2.2.3",
         "@nomiclabs/hardhat-truffle5": "^2.0.7",
         "@nomiclabs/hardhat-waffle": "^2.0.6",

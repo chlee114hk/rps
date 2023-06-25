@@ -8,6 +8,7 @@ const { ContractFactory, utils } = require('ethers');
 const { MockProvider } = require('@ethereum-waffle/provider');
 const { waffleChai } = require('@ethereum-waffle/chai');
 const { deployMockContract } = require('@ethereum-waffle/mock-contract');
+const helpers = require("@nomicfoundation/hardhat-network-helpers");
 //const { deployMockContract, provider } = waffle;
 
 use(waffleChai);
@@ -69,7 +70,7 @@ contract('Rps2', function(accounts) {
             subscriptionId,
             mockVRFCoordinatorV2Mock.address,
             "0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c",
-            { value: ethers.utils.parseEther("0.1") }
+            { value: ethers.utils.parseEther("1") }
         )
 
         return {sender, receiver, hardhatVRFCoordinatorV2Mock, contract, mockVRFCoordinatorV2Mock, mockRps2, rps2MockContract};
@@ -77,11 +78,21 @@ contract('Rps2', function(accounts) {
 
     describe("playBet", function() {
         it("should let player bet a move", async function() { 
-            const {contract, mockVRFCoordinatorV2Mock}  = await setup();
+            const {sender, contract, mockVRFCoordinatorV2Mock}  = await setup();
             const encryptedMove = utils.soliditySha256(['string'], ["1-pass"]);
             const bet = ethers.utils.parseEther("0.01");
             await mockVRFCoordinatorV2Mock.mock.requestRandomWords.returns(1);
-            let transaction = await contract.playBet(encryptedMove, { value: bet });
+            const blockNumBefore = await ethers.provider.getBlockNumber();
+            const blockBefore = await ethers.provider.getBlock(blockNumBefore);
+            const timestampBefore = blockBefore.timestamp;
+            await expect(
+                await contract.playBet(encryptedMove, { value: bet })
+            ).emit(
+                contract,
+                "FomoTimerStart"
+            )
+            const fomoEndTime = await contract.fomoEndTime();
+            expect(fomoEndTime).to.be.above(timestampBefore);
             const betInGame = await contract.bet();
             expect(ethers.utils.formatUnits(betInGame.toString())).to.be.equal("0.01", `Bet in game should be equal to value sent`);
         });
@@ -236,7 +247,72 @@ contract('Rps2', function(accounts) {
                 "Draw"
             )
         });
-    });   
+    });
+
+    describe("Fomo", function() {
+        before(async function () {
+            const {rps2MockContract, mockVRFCoordinatorV2Mock}  = await setup();
+            const bet = ethers.utils.parseEther("1");
+            const encryptedMove = utils.soliditySha256(['string'], ["1-pass"]);
+            await mockVRFCoordinatorV2Mock.mock.requestRandomWords.returns(1);
+            await rps2MockContract.setRandomWordsNum(4);
+            await rps2MockContract.playBet(encryptedMove, { value: bet });
+            const clearMove = "1-pass";
+            await rps2MockContract.reveal(clearMove);
+        });
+
+        it("should increase timer for bet > 10% of fomo pool", async function() {
+            const {sender, rps2MockContract, mockVRFCoordinatorV2Mock}  = await setup();
+            const bet = ethers.utils.parseEther("0.1");
+            const encryptedMove = utils.soliditySha256(['string'], ["1-pass"]);
+            await mockVRFCoordinatorV2Mock.mock.requestRandomWords.returns(1);
+            expect(
+                await rps2MockContract.playBet(encryptedMove, { value: bet })
+            ).to.emit(
+                rps2MockContract,
+                "FomoTimerIncrease"
+            ).to.emit(
+                "rps2MockContract",
+                "NewFomoDeposit"
+            ).withArgs(sender.address, ethers.utils.parseEther("0.01"));
+            const clearMove = "1-pass";
+            await rps2MockContract.reveal(clearMove);
+        });
+
+        it("should not increase timer for bet < 10% of fomo pool", async function() {
+            const {rps2MockContract, mockVRFCoordinatorV2Mock}  = await setup();
+            const bet = ethers.utils.parseEther("0.01");
+            const encryptedMove = utils.soliditySha256(['string'], ["1-pass"]);
+            await mockVRFCoordinatorV2Mock.mock.requestRandomWords.returns(1);
+            expect(
+                await rps2MockContract.playBet(encryptedMove, { value: bet })
+            ).not.to.emit(
+                rps2MockContract,
+                "FomoTimerIncrease"
+            ).not.to.emit(
+                "rps2MockContract",
+                "NewFomoDeposit"
+            )
+            const clearMove = "1-pass";
+            await rps2MockContract.reveal(clearMove);
+        });
+
+        it("should pay to winner when timeout", async function() {
+            const {rps2MockContract, mockVRFCoordinatorV2Mock}  = await setup();
+            const bet = ethers.utils.parseEther("0.01");
+            const encryptedMove = utils.soliditySha256(['string'], ["1-pass"]);
+            await helpers.time.increase(3600);
+            await mockVRFCoordinatorV2Mock.mock.requestRandomWords.returns(1);
+            expect(
+                await rps2MockContract.playBet(encryptedMove, { value: bet })
+            ).to.emit(
+                rps2MockContract,
+                "FomoPayment"
+            )
+            const clearMove = "1-pass";
+            await rps2MockContract.reveal(clearMove);
+        });
+    });
 
     describe("Coordinator", function() {
         it("Coordinator should successfully receive the request", async function() { 
