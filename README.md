@@ -17,10 +17,10 @@
 This smart contract implements a secure single-player Rock-Paper-Scissors game in Solidity, ready to be deployed on the EVM Compatible Blockchains.
 
 Here is the game flow:
-1. Player enters the amount of bet (minimun 0.01 ETH) and a password.
-2. Player picks a move (Rock, Paper or Scissors) by clicking on the corresponding button. The hash of concatenated string of move and password will be send in the transaction and stored.
+1. Player enters the amount of bet in ether (minimun 1 finney = 0.001 ether) and a password.
+2. Player picks a move (Rock, Paper or Scissors) by clicking on the corresponding button. The hash of concatenated string of move and password will be sent in the transaction and stored.
 3. A random number is generated using Chainlink VRF (Verifiable Random Function) as the host's move and stored.
-4. Player knows host's move now and he need to reveal what move he have played and finish the game before Reveal Phase timeout (Within 2 minutes after the host committed its move). To do so, he need to send concatenated string of their move and password in plain text. The contract verifies that the hash of the received input matches the one stored. The player not able to reveal their move before Reveal Phase timeout will be automatically treated as **Lost** to prevent the game getting stuck by a player knowing he is lost in the game.
+4. Player knows host's move once it is committed and he need to reveal what move he have played and finish the game before Reveal Phase timeout (Within 2 minutes after the host committed its move). To do so, he need to send concatenated string of his move and password in plain text. The contract verifies that the hash of the received input matches the one stored. The player failed to reveal their move before Reveal Phase timeout will be automatically treated as **Lost** to prevent the game getting stuck by a player knowing he is lost in the game and not revealing his move.
 5. Double of bet will be paid to player if he won. Bet will be returned to player if the game is draw. 
 6. The game resets and can be played again by new players.
 
@@ -46,15 +46,17 @@ At the same time, player is not able to cheat. As host's move only known to play
 
 Host's move in this project is generated using [Chainlink VRF (Verifiable Random Function)](https://docs.chain.link/vrf/v2/introduction) which is a provably fair and verifiable random number generator (RNG) that enables smart contracts to access random values without compromising security or usability. For each request, Chainlink VRF generates one or more random values and cryptographic proof of how those values were determined. The proof is published and verified on-chain before any consuming applications can use it. This process ensures that results cannot be tampered with or manipulated by any single entity including oracle operators, miners, users, or smart contract developers.
 
-**Important Notice**: [Subscription](https://docs.chain.link/vrf/v2/subscription) method is used in this proeject for requesting randomness. Enough balance of LINK tokens funded to the subscription and adding of consumer with deployed smart contract address is required for randomness in this project to generate properly.
+**Important Notice**: [Subscription](https://docs.chain.link/vrf/v2/subscription) method is used in this project for requesting randomness. Enough balance of LINK tokens funded to the subscription and adding of consumer with deployed smart contract address is required for randomness in this project to generate properly.
 
 ### ReentrancyGuard
 
 [ReentrancyGuard](https://docs.openzeppelin.com/contracts/4.x/api/security#ReentrancyGuard) from openzeppelin is used in this project
-`import "@openzeppelin/contracts/security/ReentrancyGuard.sol";`
+```solidity
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+```
 that helps prevent reentrant calls to certain function.
 
-The reveal function which included internal helper function `pay` which handle payment to player is protected by `nonReentrant` modifier that make sure there are no nested (reentrant) calls to it.
+The reveal function which included call to internal helper function `pay` which handle payment to player is protected by `nonReentrant` modifier that make sure there are no nested (reentrant) calls to it.
 
 ```solidity
 function reveal(string memory clearMove) public isPlayer commitPhaseEnded nonReentrant returns (bool) {
